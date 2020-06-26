@@ -1,0 +1,14 @@
+Package: data.rnaseq.YFV
+Title: Data package containing transcriptomic profiles of yellow fever virus-infected cells 
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Trang",
+           family = "Tran",
+           role = c("aut", "cre"),
+           email = "first.last@example.com",
+           comment = c(ORCID = "0000-0002-4219-2990"))
+Description: Transcriptomic profiles of yellow fever virus-infected cells, by Roche et al. (GEO: GSE99081)
+Depends: R (>= 3.5.3)
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
