@@ -43,8 +43,12 @@ ExpressionSet(assayData = gene.assayData)
 ```{r}
 metadata = read.table(file.path(Sys.getenv('DBDIR'),
                                 'PRJNA387233_metadata_cleaned.tsv'), sep = '\t', header = TRUE)
-
-
+# totalBases = metadata %>%
+#     dplyr::group_by(BiosampleId) %>%
+#     dplyr::summarize(TotalBases=sum(Bases)) %>%
+    # `$`('TotalBases')
+tmp = metadata[,setdiff(colnames(metadata),c('RunId', 'Bases', 'Bytes'))]
+metadata = metadata[!duplicated(tmp),]
 ```
 
 ```{r}
@@ -53,15 +57,15 @@ starLog = read.table(file.path(Sys.getenv('DBDIR'),
 meta1 = data.frame(t(starLog[,-c(1,2)])) %>%
     set_colnames(paste0('starAlignment.',starLog[[1]])) %>%
     set_rownames(colnames(starLog)[-c(1,2)])
-meta1$RunId = rownames(meta1)
+meta1$BiosampleId = rownames(meta1)
 str(meta1)
 ```
 
 ```{r}
 libnames <- colnames(gene.assayData$exprs) %>% as.character()
-allMeta <- data.frame('RunId' = libnames) %>%
-    plyr::join(y = metadata, by = 'RunId', type = 'left')  %>%
-    plyr::join(y = meta1, by = 'RunId', type = 'left') %>%
+allMeta <- data.frame('BiosampleId' = libnames) %>%
+    plyr::join(y = metadata, by = 'BiosampleId', type = 'left')  %>%
+    plyr::join(y = meta1, by = 'BiosampleId', type = 'left') %>%
     set_rownames(libnames)
 colDescription = colnames(allMeta)
 colDescription[grepl('starAlignment', colnames(allMeta))] = starLog[[2]]
